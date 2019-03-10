@@ -3,6 +3,8 @@
 ## Setup
 
 ```bash
+# Clone project
+git clone https://github.com/Eugene-Armstrong/hrm-admin.git
 
 # Install dependencies
 npm install
