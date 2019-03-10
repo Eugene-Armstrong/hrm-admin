@@ -1,5 +1,6 @@
 <template>
   <el-scrollbar wrap-class="scrollbar-wrapper">
+    <custom-logo/>
     <el-menu
       :show-timeout="200"
       :default-active="$route.path"
@@ -18,9 +19,10 @@
 import { mapGetters } from 'vuex'
 import variables from '@/styles/variables.scss'
 import SidebarItem from './SidebarItem'
+import CustomLogo from './CustomLogo'
 
 export default {
-  components: { SidebarItem },
+  components: { SidebarItem, CustomLogo },
   computed: {
     ...mapGetters([
       'sidebar'
@@ -37,3 +39,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .custom-logo{
+    text-align: center;
+    font-size: 20px;
+    color: #f0f0f0;
+    line-height: 50px;
+    height: 50px;
+    background: #304156;
+  }
+</style>
