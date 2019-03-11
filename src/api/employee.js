@@ -9,5 +9,5 @@ export function getEmployeeList(params) {
 }
 
 export function getExcelUploadApi() {
-  return 'api/employee/excelUpload'
+  return 'api/employees/excelUpload'
 }

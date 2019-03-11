@@ -14,7 +14,7 @@ export default {
         nationality: '汉族',
         nativePlace: '广东肇庆',
         phone: '@integer(13700000000, 13999999999)',
-        salary: '@integer(8000, 50000)'
+        'salary|1': [8000, 9000, 12000, 15000, 20000, 32000, 50000]
       }]
     })
     return {

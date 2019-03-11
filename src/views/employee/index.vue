@@ -14,10 +14,13 @@
           clearable/>
       </el-form-item>
       <el-form-item label="所属部门">
-        <el-input
-          v-model="searchCriteria.department"
-          class="small-input"
-          clearable/>
+        <el-select v-model="searchCriteria.department">
+          <el-option
+            v-for="item in depOptions"
+            :key="item.depNo"
+            :label="item.depName"
+            :value="item.depNo"/>
+        </el-select>
       </el-form-item>
       <el-form-item label="出生日期">
         <el-date-picker
@@ -32,10 +35,10 @@
           clearable/>
       </el-form-item>
       <el-form-item class="search-button-group">
-        <el-button type="primary" size="small">查询</el-button>
+        <el-button type="primary" size="small" @click="searchByCriteria">查询</el-button>
         <el-button size="small" @click="resetFilter">重置</el-button>
-        <el-button type="success">新增</el-button>
-        <upload-excel :on-success="uploadExcel"/>
+        <el-button type="success" @click="addNewEmployee">新增</el-button>
+        <upload-excel :on-success="uploadExcelSuccess"/>
       </el-form-item>
     </el-form>
     <el-table
@@ -47,14 +50,20 @@
       border
       highlight-current-row
       @selection-change="handleSelectionChange">
-      <el-table-column fixed type="selection" min-width="15%" align="left"/>
+      <el-table-column fixed type="selection" width="35" align="left"/>
       <el-table-column fixed label="操作" min-width="100" align="center">
         <template slot-scope="scope">
           <el-tooltip content="编辑" effect="dark" placement="top">
             <el-button circle plain size="mini" icon="el-icon-edit"/>
           </el-tooltip>
           <el-tooltip content="删除" effect="dark" placement="top">
-            <el-button type="danger" circle plain size="mini" icon="el-icon-delete"/>
+            <el-button
+              type="danger"
+              circle
+              plain
+              size="mini"
+              icon="el-icon-delete"
+              @click="deleteEmployee(scope.row)"/>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -111,7 +120,7 @@
       </el-table-column>
       <el-table-column label="月薪" min-width="110" align="center">
         <template slot-scope="scope">
-          {{ scope.row.salary }}
+          {{ toThousandslsFilter(scope.row.salary) }}
         </template>
       </el-table-column>
     </el-table>
@@ -138,6 +147,14 @@ export default {
   data() {
     return {
       employeeList: [],
+      depOptions: [
+        { depNo: 0, depName: 'All' },
+        { depNo: 1, depName: 'CargoSmart' },
+        { depNo: 2, depName: 'Iris4' },
+        { depNo: 3, depName: 'GDSC' },
+        { depNo: 4, depName: 'HRA' },
+        { depNo: 5, depName: 'Others...' }
+      ],
       total: 0,
       page: 1,
       size: 20,
@@ -157,6 +174,23 @@ export default {
     this.fetchMockData()
   },
   methods: {
+    searchByCriteria() {
+      // TODO searchByCriteria
+      console.log('searchByCriteria', this.searchCriteria)
+    },
+    addNewEmployee() {
+      // TODO addNewEmployee
+    },
+    deleteEmployee(employee) {
+      this.$confirm('将永久删除该员工信息, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // TODO deleteEmployee
+        console.log('delete employee', employee)
+      })
+    },
     handleSelectionChange(multiSelection) {
       this.multipleSelection = multiSelection
       console.log('multiSelection', multiSelection)
@@ -168,7 +202,7 @@ export default {
       this.searchCriteria.birthDate = ''
       this.searchCriteria.phone = ''
     },
-    uploadExcel({ results }) {
+    uploadExcelSuccess({ results }) {
       this.employeeList = results
     },
     exportSelectedItems(multipleSelection) {
@@ -198,6 +232,9 @@ export default {
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => v[j]))
     },
+    toThousandslsFilter(num) {
+      return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
+    },
     async fetchMockData() {
       this.listLoading = true
       await getEmployeeList().then(response => {
@@ -214,10 +251,10 @@ export default {
     .el-form-item__label{
       line-height: 19px;
       font-size: 13px;
-      padding-bottom: 0;
+      padding-bottom: 3px;
     }
     .search-button-group {
-      padding-top: 19px;
+      padding-top: 22px;
     }
     .small-input{
       width: 160px;
