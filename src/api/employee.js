@@ -7,3 +7,7 @@ export function getEmployeeList(params) {
     params
   })
 }
+
+export function getExcelUploadApi() {
+  return 'api/employee/excelUpload'
+}

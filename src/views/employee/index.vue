@@ -35,12 +35,13 @@
         <el-button type="primary" size="small">查询</el-button>
         <el-button size="small" @click="resetFilter">重置</el-button>
         <el-button type="success">新增</el-button>
+        <upload-excel :on-success="uploadExcel"/>
       </el-form-item>
     </el-form>
     <el-table
       v-loading="listLoading"
       ref="multipleTable"
-      :data="list"
+      :data="employeeList"
       element-loading-text="加载中"
       tooltip-effect="dark"
       border
@@ -57,19 +58,19 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="编号">
+      <el-table-column align="center" min-width="200" label="员工编号">
         <template slot-scope="scope">
-          {{ scope.$index }}
+          {{ scope.row.empNo }}
         </template>
       </el-table-column>
       <el-table-column label="姓名" min-width="110" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          {{ scope.row.name }}
         </template>
       </el-table-column>
       <el-table-column label="英文名" min-width="110" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.nameEn }}</span>
+          {{ scope.row.nameEn }}
         </template>
       </el-table-column>
       <el-table-column label="性别" min-width="80" align="center">
@@ -90,7 +91,7 @@
       <el-table-column align="center" prop="created_at" label="出生日期" min-width="140">
         <template slot-scope="scope">
           <i class="el-icon-time"/>
-          <span>{{ scope.row.birthDate }}</span>
+          {{ scope.row.birthDate }}
         </template>
       </el-table-column>
       <el-table-column label="民族" min-width="80" align="center">
@@ -114,23 +115,35 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination :total="total" :limit.sync="size" :page.sync="page" class="pagination" @pagination="fetchData"/>
+    <pagination :total="total" :limit.sync="size" :page.sync="page" class="pagination" @pagination="fetchMockData"/>
+    <el-row type="flex" justify="end" class="button-panel" align="middle">
+      <el-button
+        :loading="downloadLoading"
+        :disabled="multipleSelection.length === 0"
+        type="primary"
+        size="small"
+        @click="exportSelectedItems(multipleSelection)">导出数据</el-button>
+      <el-button size="small" @click="exportSelectedItems([])">模板下载</el-button>
+    </el-row>
   </div>
 </template>
 
 <script>
 import { getEmployeeList } from '@/api/employee'
+import UploadExcel from '@/views/employee/uploadExcel'
 import Pagination from '@/components/Pagination'
 
 export default {
-  components: { Pagination },
+  components: { Pagination, UploadExcel },
   data() {
     return {
-      list: null,
+      employeeList: [],
       total: 0,
       page: 1,
       size: 20,
       listLoading: true,
+      multipleSelection: [],
+      downloadLoading: false,
       searchCriteria: {
         empNo: '',
         name: '',
@@ -141,10 +154,11 @@ export default {
     }
   },
   created() {
-    this.fetchData()
+    this.fetchMockData()
   },
   methods: {
     handleSelectionChange(multiSelection) {
+      this.multipleSelection = multiSelection
       console.log('multiSelection', multiSelection)
     },
     resetFilter() {
@@ -154,10 +168,40 @@ export default {
       this.searchCriteria.birthDate = ''
       this.searchCriteria.phone = ''
     },
-    async fetchData() {
+    uploadExcel({ results }) {
+      this.employeeList = results
+    },
+    exportSelectedItems(multipleSelection) {
+      const isExported = multipleSelection.length
+      const fileName = isExported ? '导出员工信息' : '员工信息填写模板'
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = isExported
+          ? ['员工编号', '姓名', '英文名', '性别', '所属部门', '身份证', '出生日期',
+            '民族', '籍贯', '电话', '月薪']
+          : ['姓名', '英文名', '性别', '所属部门', '身份证', '出生日期',
+            '民族', '籍贯', '电话', '月薪']
+        const filterVal = isExported
+          ? ['empNo', 'name', 'nameEn', 'gender', 'department', 'idCard', 'birthDate',
+            'nationality', 'nativePlace', 'phone', 'salary']
+          : ['name', 'nameEn', 'gender', 'department', 'idCard', 'birthDate',
+            'nationality', 'nativePlace', 'phone', 'salary']
+        const data = this.formatJson(filterVal, multipleSelection)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: fileName
+        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]))
+    },
+    async fetchMockData() {
       this.listLoading = true
       await getEmployeeList().then(response => {
-        this.list = response.data.items
+        this.employeeList = response.data.items
         this.listLoading = false
       })
     }
@@ -177,6 +221,23 @@ export default {
     }
     .small-input{
       width: 160px;
+    }
+    .pagination-container{
+      margin-bottom: 30px;
+    }
+    .button-panel {
+      position:fixed;
+      z-index: 10;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 50px;
+      padding-right: 15px;
+      border-top: 1px solid #cccccc;
+      background-color: rgba(255,255,255,1);
+      .el-button {
+        margin-left: 10px;
+      }
     }
   }
 </style>
