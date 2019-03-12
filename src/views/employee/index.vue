@@ -69,7 +69,7 @@
       </el-table-column>
       <el-table-column align="center" min-width="200" label="员工编号">
         <template slot-scope="scope">
-          {{ scope.row.empNo }}
+          {{ scope.row.id }}
         </template>
       </el-table-column>
       <el-table-column label="姓名" min-width="110" align="center">
@@ -79,7 +79,7 @@
       </el-table-column>
       <el-table-column label="英文名" min-width="110" align="center">
         <template slot-scope="scope">
-          {{ scope.row.nameEn }}
+          {{ scope.row.englishName }}
         </template>
       </el-table-column>
       <el-table-column label="性别" min-width="80" align="center">
@@ -100,7 +100,7 @@
       <el-table-column align="center" prop="created_at" label="出生日期" min-width="140">
         <template slot-scope="scope">
           <i class="el-icon-time"/>
-          {{ scope.row.birthDate }}
+          {{ scope.row.birthday }}
         </template>
       </el-table-column>
       <el-table-column label="民族" min-width="80" align="center">
@@ -110,21 +110,21 @@
       </el-table-column>
       <el-table-column label="籍贯" min-width="110" align="center">
         <template slot-scope="scope">
-          {{ scope.row.nativePlace }}
+          {{ scope.row.birthplace }}
         </template>
       </el-table-column>
       <el-table-column label="电话" min-width="110" align="center">
         <template slot-scope="scope">
-          {{ scope.row.phone }}
+          {{ scope.row.mobilePhone }}
         </template>
       </el-table-column>
       <el-table-column label="月薪" min-width="110" align="center">
         <template slot-scope="scope">
-          {{ toThousandslsFilter(scope.row.salary) }}
+          {{ toThousandslsFilter(scope.row.monthlySalary) }}
         </template>
       </el-table-column>
     </el-table>
-    <pagination :total="total" :limit.sync="size" :page.sync="page" class="pagination" @pagination="fetchMockData"/>
+    <pagination :total="total" :limit.sync="size" :page.sync="page" class="pagination" @pagination="fetchEmployeeList"/>
     <el-row type="flex" justify="end" class="button-panel" align="middle">
       <el-button
         :loading="downloadLoading"
@@ -138,7 +138,7 @@
 </template>
 
 <script>
-import { getEmployeeList } from '@/api/employee'
+import { getEmployeeList } from '../../api/employee'
 import UploadExcel from '@/views/employee/uploadExcel'
 import Pagination from '@/components/Pagination'
 
@@ -171,7 +171,7 @@ export default {
     }
   },
   created() {
-    this.fetchMockData()
+    this.fetchEmployeeList()
   },
   methods: {
     searchByCriteria() {
@@ -235,12 +235,12 @@ export default {
     toThousandslsFilter(num) {
       return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
     },
-    async fetchMockData() {
+    fetchEmployeeList() {
       this.listLoading = true
-      await getEmployeeList().then(response => {
-        this.employeeList = response.data.items
+      getEmployeeList().then(response => {
+        this.employeeList = response.data
         this.listLoading = false
-      })
+      }).catch(e => { console.log(e) })
     }
   }
 }
