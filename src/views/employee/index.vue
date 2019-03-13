@@ -131,6 +131,7 @@
       </el-table-column>
     </el-table>
     <detail-dialog v-model="showDialog" :detail="employeeDetail" :departments="departmentsList" @reloadData="fetchEmployeeList"/>
+    <create-dialog v-model="showCreateDialog" @reloadData="fetchEmployeeList"/>
     <pagination :total="total" :limit.sync="size" :page.sync="page" class="pagination" @pagination="fetchEmployeeList"/>
     <el-row type="flex" justify="end" class="button-panel" align="middle">
       <el-button
@@ -146,11 +147,13 @@
 
 <script>
 import UploadExcel from '../../views/employee/uploadExcel'
+import DetailDialog from '../../views/employee/detailDialog'
+import CreateDialog from '../../views/employee/createDialog'
 import Pagination from '@/components/Pagination'
 import employeesService from '@/service/employees-service'
 import departmentsService from '@/service/departments-service'
 export default {
-  components: { Pagination, UploadExcel, DetailDialog },
+  components: { Pagination, UploadExcel, DetailDialog, CreateDialog },
   data() {
     return {
       employeeList: [],
@@ -163,6 +166,7 @@ export default {
       multipleSelection: [],
       downloadLoading: false,
       showDialog: false,
+      showCreateDialog: false,
       searchCriteria: {
         empNo: '',
         name: '',
@@ -182,8 +186,7 @@ export default {
       console.log('searchByCriteria', this.searchCriteria)
     },
     addNewEmployee() {
-      // TODO addNewEmployee
-      this.showDialog = true
+      this.showCreateDialog = true
     },
     async getDepartmentList() {
       this.departmentsList = await departmentsService.getDepartmentsList('a')
