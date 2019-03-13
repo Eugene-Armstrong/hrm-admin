@@ -1,5 +1,7 @@
 <template>
-  <div class="login-container">
+  <div class="login-container search-bg hero">
+    <div id="stars"/>
+    <div id="stars2"/>
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <h3 class="title">人力资源后台管理系统</h3>
       <el-form-item prop="username">
@@ -137,6 +139,7 @@ $light_gray:#eee;
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  @import '@/styles/bubble.scss';
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
