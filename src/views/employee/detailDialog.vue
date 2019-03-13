@@ -29,12 +29,24 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="所属部门" prop="department">
-              <el-input v-model="department.name"/>
+              <el-select v-model="department.name">
+                <el-option
+                  v-for="item in depOptions"
+                  :key="item.depNo"
+                  :label="item.depName"
+                  :value="item.depNo"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="性别" prop="gender">
-              <el-input v-model="copyDetail.gender"/>
+              <el-select v-model="copyDetail.gender">
+                <el-option
+                  v-for="item in genderOptions"
+                  :key="item.value"
+                  :label="item.value"
+                  :value="item.value"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -53,7 +65,10 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="出生日期" prop="birthday">
-              <el-input v-model="copyDetail.birthday"/>
+              <el-date-picker
+                v-model="copyDetail.birthday"
+                type="date"
+                class="small-input"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -70,7 +85,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="月薪" prop="monthlySalary">
-              <el-input v-model="copyDetail.monthlySalary" type="tel"/>
+              <el-input v-model="copyDetail.monthlySalary" type="number"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -116,6 +131,15 @@ export default {
       showDialog: false,
       copyDetail: {},
       department: {},
+      depOptions: [
+        { depNo: 1, depName: 'CargoSmart' },
+        { depNo: 2, depName: 'Iris4' },
+        { depNo: 3, depName: 'GDSC' }
+      ],
+      genderOptions: [
+        { value: '男' },
+        { value: '女' }
+      ],
       rules: {
       }
     }
