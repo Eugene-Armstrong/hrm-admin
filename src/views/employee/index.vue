@@ -146,7 +146,6 @@
 
 <script>
 import UploadExcel from '../../views/employee/uploadExcel'
-import DetailDialog from '../../views/employee/detailDialog'
 import Pagination from '@/components/Pagination'
 import employeesService from '@/service/employees-service'
 import departmentsService from '@/service/departments-service'

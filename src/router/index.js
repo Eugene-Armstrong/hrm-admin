@@ -24,56 +24,82 @@ import Layout from '../views/layout/Layout'
 **/
 export const constantRouterMap = [
   {
-    path: '/login',
-    component: () => import('@/views/login/index'),
+    path: "/login",
+    component: () => import("@/views/login/index"),
     hidden: true
   },
   {
-    path: '/404',
-    component: () => import('@/views/404'),
+    path: "/404",
+    component: () => import("@/views/404"),
     hidden: true
   },
 
   {
-    path: '/',
+    path: "/",
     component: Layout,
-    redirect: '/home',
-    name: 'Home',
+    redirect: "/home",
+    name: "Home",
     hidden: true,
     children: [
       {
-        path: 'home',
-        component: () => import('@/views/home/index'),
-        meta: { title: '首页' }
+        path: "home",
+        component: () => import("@/views/home/index"),
+        meta: { title: "首页" }
       }
     ]
   },
   {
-    path: '/employee',
+    path: "/employee",
     component: Layout,
     children: [
       {
-        path: 'index',
-        name: 'Employee',
-        component: () => import('@/views/employee/index'),
-        meta: { title: '员工信息', icon: 'table' }
+        path: "index",
+        name: "Employee",
+        component: () => import("@/views/employee/index"),
+        meta: { title: "员工信息", icon: "table" }
       }
     ]
   },
   {
-    path: '/form',
+    path: "/form",
     component: Layout,
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: '其他', icon: 'form' }
+        path: "index",
+        name: "Form",
+        component: () => import("@/views/form/index"),
+        meta: { title: "其他", icon: "form" }
       }
     ]
   },
-  { path: '*', redirect: '/404', hidden: true }
-]
+  {
+    path: "/employee",
+    component: Layout,
+    children: [
+      {
+        path: "create",
+        name: "CreateEmployee",
+        component: () => import("@/views/employee/create"),
+        meta: { title: "新建员工", icon: "table" },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: "/employee",
+    component: Layout,
+    children: [
+      {
+        path: "edit/:id",
+        name: "CreateEmployee",
+        component: () => import("@/views/employee/create"),
+        meta: { title: "修改员工", icon: "table" },
+        hidden: true
+      }
+    ]
+  },
+  { path: "*", redirect: "/404", hidden: true }
+];
 
 export default new Router({
   // mode: 'history', //后端支持可开
