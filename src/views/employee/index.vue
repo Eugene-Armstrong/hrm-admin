@@ -9,7 +9,7 @@
       inline>
       <el-form-item label="员工编号">
         <el-input
-          v-model="searchCriteria.id"
+          v-model="searchCriteria.empNo"
           class="small-input"
           clearable/>
       </el-form-item>
@@ -43,7 +43,9 @@
       <el-form-item class="search-button-group">
         <el-button type="primary" size="small" @click="searchByCriteria">查询</el-button>
         <el-button size="small" @click="resetFilter">重置</el-button>
-        <el-button type="success" @click="addNewEmployee">新增</el-button>
+        <router-link :to="'/employee/create'">
+          <el-button type="success">新增</el-button>
+        </router-link>
         <upload-excel :on-success="uploadExcelSuccess"/>
       </el-form-item>
     </el-form>
@@ -57,23 +59,7 @@
       highlight-current-row
       @selection-change="handleSelectionChange">
       <el-table-column fixed type="selection" width="35" align="left"/>
-      <el-table-column fixed label="操作" min-width="100" align="center">
-        <template slot-scope="scope">
-          <el-tooltip content="编辑" effect="dark" placement="top">
-            <el-button circle plain size="mini" icon="el-icon-edit" @click="updateEmployee(scope.row)"/>
-          </el-tooltip>
-          <el-tooltip content="删除" effect="dark" placement="top">
-            <el-button
-              type="danger"
-              circle
-              plain
-              size="mini"
-              icon="el-icon-delete"
-              @click="deleteEmployee(scope.row.id, scope.row.name)"/>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" min-width="100" label="员工编号">
+      <el-table-column align="center" min-width="200" label="员工编号">
         <template slot-scope="scope">
           {{ scope.row.id }}
         </template>
@@ -103,7 +89,7 @@
           {{ scope.row.idCard }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="birthday" label="出生日期" min-width="140">
+      <el-table-column align="center" prop="created_at" label="出生日期" min-width="140">
         <template slot-scope="scope">
           <i class="el-icon-time"/>
           {{ scope.row.birthday }}
@@ -129,6 +115,14 @@
           {{ toThousandslsFilter(scope.row.monthlySalary) }}
         </template>
       </el-table-column>
+      <el-table-column label="操作" min-width="110" align="center">
+        <template slot-scope="scope">
+          <router-link :to="'/employee/edit/'+scope.row.id">
+            <el-button type="primary" icon="el-icon-edit" circle @click="doEdit(scope.row)"/>
+          </router-link>
+          <el-button type="danger" icon="el-icon-delete" circle @click="deleteEmployee(scope.row.id)" />
+        </template>
+      </el-table-column>
     </el-table>
     <detail-dialog v-model="showDialog" :detail="employeeDetail" @reloadData="fetchEmployeeList"/>
     <pagination :total="total" :limit.sync="size" :page.sync="page" class="pagination" @pagination="fetchEmployeeList"/>
@@ -145,12 +139,12 @@
 </template>
 
 <script>
+import { getEmployeeList, deleteEmployeeById } from '../../api/employee'
 import UploadExcel from '../../views/employee/uploadExcel'
-import DetailDialog from '../../views/employee/detailDialog'
 import Pagination from '@/components/Pagination'
-import employeesService from '@/service/employees-service'
+
 export default {
-  components: { Pagination, UploadExcel, DetailDialog },
+  components: { Pagination, UploadExcel },
   data() {
     return {
       employeeList: [],
@@ -163,7 +157,7 @@ export default {
       ],
       total: 0,
       page: 1,
-      size: 10,
+      size: 20,
       listLoading: true,
       multipleSelection: [],
       downloadLoading: false,
@@ -187,23 +181,32 @@ export default {
     },
     addNewEmployee() {
       // TODO addNewEmployee
-      this.showDialog = true
     },
     updateEmployee(employee) {
       this.employeeDetail = employee
       this.showDialog = true
       console.log('employee', employee)
     },
-    async deleteEmployee(id) {
+    deleteEmployee(id) {
       this.$confirm('将永久删除该员工信息, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(async() => {
-        await employeesService.deleteEmployee(id)
-        this.employeeList = await this.fetchEmployeeList()
-        console.log('delete employee', name)
+      }).then(() => {
+        this.listLoading = true
+        deleteEmployeeById(id).then(response => {
+          this.fetchEmployeeList()
+          this.listLoading = false
+        }).catch(e => { console.log(e) })
+        console.log('delete employee', id)
       })
+    },
+    fetchEmployeeList() {
+      this.listLoading = true
+      getEmployeeList().then(response => {
+        this.employeeList = response.data
+        this.listLoading = false
+      }).catch(e => { console.log(e) })
     },
     handleSelectionChange(multiSelection) {
       this.multipleSelection = multiSelection
@@ -248,11 +251,6 @@ export default {
     },
     toThousandslsFilter(num) {
       return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
-    },
-    async fetchEmployeeList() {
-      this.listLoading = true
-      this.employeeList = await employeesService.getEmployeesList('aa')
-      this.listLoading = false
     }
   }
 }
