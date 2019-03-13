@@ -37,3 +37,12 @@ export const remove = async(url) => {
     method: 'DELETE'
   })
 }
+
+export const put = async(url, params) => {
+  return await axios.request({
+    // headers: await addAuthenticationHeader(),
+    url: url,
+    method: 'PUT',
+    data: params
+  })
+}

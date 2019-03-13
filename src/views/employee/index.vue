@@ -22,10 +22,10 @@
       <el-form-item label="所属部门">
         <el-select v-model="searchCriteria.department">
           <el-option
-            v-for="item in depOptions"
-            :key="item.depNo"
-            :label="item.depName"
-            :value="item.depNo"/>
+            v-for="item in departmentsList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"/>
         </el-select>
       </el-form-item>
       <el-form-item label="出生日期">
@@ -130,7 +130,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <detail-dialog v-model="showDialog" :detail="employeeDetail" @reloadData="fetchEmployeeList"/>
+    <detail-dialog v-model="showDialog" :detail="employeeDetail" :departments="departmentsList" @reloadData="fetchEmployeeList"/>
     <pagination :total="total" :limit.sync="size" :page.sync="page" class="pagination" @pagination="fetchEmployeeList"/>
     <el-row type="flex" justify="end" class="button-panel" align="middle">
       <el-button
@@ -149,18 +149,14 @@ import UploadExcel from '../../views/employee/uploadExcel'
 import DetailDialog from '../../views/employee/detailDialog'
 import Pagination from '@/components/Pagination'
 import employeesService from '@/service/employees-service'
+import departmentsService from '@/service/departments-service'
 export default {
   components: { Pagination, UploadExcel, DetailDialog },
   data() {
     return {
       employeeList: [],
       employeeDetail: {},
-      depOptions: [
-        { depNo: 0, depName: 'All' },
-        { depNo: 1, depName: 'CargoSmart' },
-        { depNo: 2, depName: 'Iris4' },
-        { depNo: 3, depName: 'GDSC' }
-      ],
+      departmentsList: [],
       total: 0,
       page: 1,
       size: 10,
@@ -179,6 +175,7 @@ export default {
   },
   created() {
     this.fetchEmployeeList()
+    this.getDepartmentList()
   },
   methods: {
     searchByCriteria() {
@@ -188,6 +185,9 @@ export default {
     addNewEmployee() {
       // TODO addNewEmployee
       this.showDialog = true
+    },
+    async getDepartmentList() {
+      this.departmentsList = await departmentsService.getDepartmentsList('a')
     },
     updateEmployee(employee) {
       this.employeeDetail = employee

@@ -1,4 +1,4 @@
-import { get, remove } from '@/utils/httpHelper'
+import { get, remove, put } from '@/utils/httpHelper'
 import * as api from '@/api/interface'
 
 const getEmployeesList = async(params) => {
@@ -15,7 +15,12 @@ const deleteEmployee = async(id) => {
   return result.data
 }
 
+const updateEmployee = async(params) => {
+  console.log(api.updateEmployeesURL)
+  await put(api.updateEmployeesURL, params)
+}
 export default {
   getEmployeesList,
-  deleteEmployee
+  deleteEmployee,
+  updateEmployee
 }

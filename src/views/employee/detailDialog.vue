@@ -31,10 +31,10 @@
             <el-form-item label="所属部门" prop="department">
               <el-select v-model="department.name">
                 <el-option
-                  v-for="item in depOptions"
-                  :key="item.depNo"
-                  :label="item.depName"
-                  :value="item.depNo"/>
+                  v-for="item in departments"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -99,12 +99,18 @@
 </template>
 <script>
 import _ from 'lodash'
-
+import employeesService from '@/service/employees-service'
 export default {
   name: 'DetailDialog',
   props: {
     detail: {
       type: Object,
+      default: () => {
+        return {}
+      }
+    },
+    departments: {
+      type: Array,
       default: () => {
         return {}
       }
@@ -131,11 +137,7 @@ export default {
       showDialog: false,
       copyDetail: {},
       department: {},
-      depOptions: [
-        { depNo: 1, depName: 'CargoSmart' },
-        { depNo: 2, depName: 'Iris4' },
-        { depNo: 3, depName: 'GDSC' }
-      ],
+      departmentsList: [],
       genderOptions: [
         { value: '男' },
         { value: '女' }
@@ -161,9 +163,11 @@ export default {
       this.$emit('input', false)
     },
     confirm() {
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs['dataForm'].validate(async(valid) => {
         if (valid) {
-          //
+          await employeesService.updateEmployee({ ...this.copyDetail })
+          this.showDialog = false
+          this.$emit('reloadData')
         }
       })
     }
