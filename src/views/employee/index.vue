@@ -9,7 +9,7 @@
       inline>
       <el-form-item label="员工编号">
         <el-input
-          v-model="searchCriteria.empNo"
+          v-model="searchCriteria.id"
           class="small-input"
           clearable/>
       </el-form-item>
@@ -57,9 +57,25 @@
       highlight-current-row
       @selection-change="handleSelectionChange">
       <el-table-column fixed type="selection" width="35" align="left"/>
-      <el-table-column align="center" min-width="200" label="员工编号">
+      <el-table-column fixed label="操作" min-width="100" align="center">
         <template slot-scope="scope">
-          {{ scope.row.empNo }}
+          <el-tooltip content="编辑" effect="dark" placement="top">
+            <el-button circle plain size="mini" icon="el-icon-edit" @click="updateEmployee(scope.row)"/>
+          </el-tooltip>
+          <el-tooltip content="删除" effect="dark" placement="top">
+            <el-button
+              type="danger"
+              circle
+              plain
+              size="mini"
+              icon="el-icon-delete"
+              @click="deleteEmployee(scope.row)"/>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" min-width="100" label="员工编号">
+        <template slot-scope="scope">
+          {{ scope.row.id }}
         </template>
       </el-table-column>
       <el-table-column label="姓名" min-width="110" align="center">
@@ -69,7 +85,7 @@
       </el-table-column>
       <el-table-column label="英文名" min-width="110" align="center">
         <template slot-scope="scope">
-          {{ scope.row.nameEn }}
+          {{ scope.row.englishName }}
         </template>
       </el-table-column>
       <el-table-column label="性别" min-width="80" align="center">
@@ -79,7 +95,7 @@
       </el-table-column>
       <el-table-column label="所属部门" min-width="110" align="center">
         <template slot-scope="scope">
-          {{ scope.row.department }}
+          {{ scope.row.department.name }}
         </template>
       </el-table-column>
       <el-table-column label="身份证" min-width="200" align="center">
@@ -87,10 +103,10 @@
           {{ scope.row.idCard }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="出生日期" min-width="140">
+      <el-table-column align="center" prop="birthday" label="出生日期" min-width="140">
         <template slot-scope="scope">
           <i class="el-icon-time"/>
-          {{ scope.row.birthDate }}
+          {{ scope.row.birthday }}
         </template>
       </el-table-column>
       <el-table-column label="民族" min-width="80" align="center">
@@ -100,23 +116,17 @@
       </el-table-column>
       <el-table-column label="籍贯" min-width="110" align="center">
         <template slot-scope="scope">
-          {{ scope.row.nativePlace }}
+          {{ scope.row.birthplace }}
         </template>
       </el-table-column>
       <el-table-column label="电话" min-width="110" align="center">
         <template slot-scope="scope">
-          {{ scope.row.phone }}
+          {{ scope.row.mobilePhone }}
         </template>
       </el-table-column>
       <el-table-column label="月薪" min-width="110" align="center">
         <template slot-scope="scope">
-          {{ toThousandslsFilter(scope.row.salary) }}
-        </template>
-      </el-table-column>
-     <el-table-column label="操作" min-width="110" align="center">
-        <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" circle @click="doEdit(scope.row)"/>
-          <el-button type="danger" icon="el-icon-delete" circle @click="deleteEmployee(scope.row._id,scope.row)" />
+          {{ toThousandslsFilter(scope.row.monthlySalary) }}
         </template>
       </el-table-column>
     </el-table>
@@ -135,14 +145,12 @@
 </template>
 
 <script>
-import UploadExcel from '@/views/employee/uploadExcel'
-import { getEmployeeList } from '../../api/employee'
 import UploadExcel from '../../views/employee/uploadExcel'
 import DetailDialog from '../../views/employee/detailDialog'
 import Pagination from '@/components/Pagination'
 import employeesService from '@/service/employees-service'
 export default {
-  components: { Pagination, UploadExcel },
+  components: { Pagination, UploadExcel, DetailDialog },
   data() {
     return {
       employeeList: [],
@@ -155,7 +163,7 @@ export default {
       ],
       total: 0,
       page: 1,
-      size: 20,
+      size: 10,
       listLoading: true,
       multipleSelection: [],
       downloadLoading: false,
