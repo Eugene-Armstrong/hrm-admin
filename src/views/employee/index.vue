@@ -138,10 +138,9 @@
 </template>
 
 <script>
-import { getEmployeeList } from '../../api/employee'
 import UploadExcel from '@/views/employee/uploadExcel'
 import Pagination from '@/components/Pagination'
-
+import employeesService from '@/service/employees-service'
 export default {
   components: { Pagination, UploadExcel },
   data() {
@@ -235,12 +234,10 @@ export default {
     toThousandslsFilter(num) {
       return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
     },
-    fetchEmployeeList() {
+    async fetchEmployeeList() {
       this.listLoading = true
-      getEmployeeList().then(response => {
-        this.employeeList = response.data
-        this.listLoading = false
-      }).catch(e => { console.log(e) })
+      this.employeeList = await employeesService.getEmployeesList('aa')
+      this.listLoading = false
     }
   }
 }
