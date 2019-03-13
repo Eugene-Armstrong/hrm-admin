@@ -1,11 +1,7 @@
-import request from '@/utils/request'
+import axios from 'axios'
 
-export function getEmployeeList(params) {
-  return request({
-    url: '/employee/list',
-    method: 'get',
-    params
-  })
+export async function getEmployeeList() {
+  return await axios.get('http://localhost:9090/employees')
 }
 
 export function getExcelUploadApi() {
