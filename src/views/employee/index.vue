@@ -69,7 +69,7 @@
               plain
               size="mini"
               icon="el-icon-delete"
-              @click="deleteEmployee(scope.row)"/>
+              @click="deleteEmployee(scope.row.id, scope.row.name)"/>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -187,20 +187,22 @@ export default {
     },
     addNewEmployee() {
       // TODO addNewEmployee
+      this.showDialog = true
     },
     updateEmployee(employee) {
       this.employeeDetail = employee
       this.showDialog = true
       console.log('employee', employee)
     },
-    deleteEmployee(employee) {
+    async deleteEmployee(id) {
       this.$confirm('将永久删除该员工信息, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        // TODO deleteEmployee
-        console.log('delete employee', employee)
+      }).then(async() => {
+        await employeesService.deleteEmployee(id)
+        this.employeeList = await this.fetchEmployeeList()
+        console.log('delete employee', name)
       })
     },
     handleSelectionChange(multiSelection) {

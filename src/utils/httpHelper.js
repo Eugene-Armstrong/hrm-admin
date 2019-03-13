@@ -30,3 +30,10 @@ export const post = async(url, params) => {
     data: params
   })
 }
+
+export const remove = async(url) => {
+  return await axios.request({
+    url: url,
+    method: 'DELETE'
+  })
+}
