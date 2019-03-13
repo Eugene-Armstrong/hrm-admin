@@ -51,22 +51,6 @@
       highlight-current-row
       @selection-change="handleSelectionChange">
       <el-table-column fixed type="selection" width="35" align="left"/>
-      <el-table-column fixed label="操作" min-width="100" align="center">
-        <template slot-scope="scope">
-          <el-tooltip content="编辑" effect="dark" placement="top">
-            <el-button circle plain size="mini" icon="el-icon-edit"/>
-          </el-tooltip>
-          <el-tooltip content="删除" effect="dark" placement="top">
-            <el-button
-              type="danger"
-              circle
-              plain
-              size="mini"
-              icon="el-icon-delete"
-              @click="deleteEmployee(scope.row)"/>
-          </el-tooltip>
-        </template>
-      </el-table-column>
       <el-table-column align="center" min-width="200" label="员工编号">
         <template slot-scope="scope">
           {{ scope.row.empNo }}
@@ -121,6 +105,12 @@
       <el-table-column label="月薪" min-width="110" align="center">
         <template slot-scope="scope">
           {{ toThousandslsFilter(scope.row.salary) }}
+        </template>
+      </el-table-column>
+     <el-table-column label="操作" min-width="110" align="center">
+        <template slot-scope="scope">
+          <el-button type="primary" icon="el-icon-edit" circle @click="doEdit(scope.row)"/>
+          <el-button type="danger" icon="el-icon-delete" circle @click="deleteEmployee(scope.row._id,scope.row)" />
         </template>
       </el-table-column>
     </el-table>
