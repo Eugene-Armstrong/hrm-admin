@@ -23,47 +23,57 @@ import Layout from '../views/layout/Layout'
   }
 **/
 export const constantRouterMap = [
-  { path: '/login', component: () => import('@/views/login/index'), hidden: true },
-  { path: '/404', component: () => import('@/views/404'), hidden: true },
+         {
+           path: "/login",
+           component: () => import("@/views/login/index"),
+           hidden: true
+         },
+         {
+           path: "/404",
+           component: () => import("@/views/404"),
+           hidden: true
+         },
 
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/home',
-    name: 'Home',
-    hidden: true,
-    children: [{
-      path: 'home',
-      component: () => import('@/views/home/index'),
-      meta: { title: '首页' }
-    }]
-  },
-  {
-    path: '/employee',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Employee',
-        component: () => import('@/views/employee/index'),
-        meta: { title: '员工信息', icon: 'table' }
-      }
-    ]
-  },
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: '其他', icon: 'form' }
-      }
-    ]
-  },
-  { path: '*', redirect: '/404', hidden: true }
-]
+         {
+           path: "/",
+           component: Layout,
+           redirect: "/home",
+           name: "Home",
+           hidden: true,
+           children: [
+             {
+               path: "home",
+               component: () => import("@/views/home/index"),
+               meta: { title: "首页" }
+             }
+           ]
+         },
+         {
+           path: "/employee",
+           component: Layout,
+           children: [
+             {
+               path: "index",
+               name: "Employee",
+               component: () => import("@/views/employee/index"),
+               meta: { title: "员工信息", icon: "table" }
+             }
+           ]
+         },
+         {
+           path: "/form",
+           component: Layout,
+           children: [
+             {
+               path: "index",
+               name: "Form",
+               component: () => import("@/views/form/index"),
+               meta: { title: "其他", icon: "form" }
+             }
+           ]
+         },
+         { path: "*", redirect: "/404", hidden: true }
+       ];
 
 export default new Router({
   // mode: 'history', //后端支持可开
