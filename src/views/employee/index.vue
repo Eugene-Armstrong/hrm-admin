@@ -1,6 +1,12 @@
 <template>
   <div class="app-container">
-    <el-form :model="searchCriteria" label-position="top" label-width="80px" size="small" inline>
+    <el-form
+      :model="searchCriteria"
+      label-position="top"
+      label-width="80px"
+      size="small"
+      class="hrm-search-form"
+      inline>
       <el-form-item label="员工编号">
         <el-input
           v-model="searchCriteria.empNo"
@@ -28,7 +34,7 @@
           type="date"
           class="small-input"/>
       </el-form-item>
-      <el-form-item label="电话号码">
+      <el-form-item label="手机">
         <el-input
           v-model="searchCriteria.phone"
           class="small-input"
@@ -54,7 +60,7 @@
       <el-table-column fixed label="操作" min-width="100" align="center">
         <template slot-scope="scope">
           <el-tooltip content="编辑" effect="dark" placement="top">
-            <el-button circle plain size="mini" icon="el-icon-edit"/>
+            <el-button circle plain size="mini" icon="el-icon-edit" @click="updateEmployee(scope.row)"/>
           </el-tooltip>
           <el-tooltip content="删除" effect="dark" placement="top">
             <el-button
@@ -67,7 +73,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column align="center" min-width="200" label="员工编号">
+      <el-table-column align="center" min-width="100" label="员工编号">
         <template slot-scope="scope">
           {{ scope.row.id }}
         </template>
@@ -89,7 +95,7 @@
       </el-table-column>
       <el-table-column label="所属部门" min-width="110" align="center">
         <template slot-scope="scope">
-          {{ scope.row.department }}
+          {{ scope.row.department.name }}
         </template>
       </el-table-column>
       <el-table-column label="身份证" min-width="200" align="center">
@@ -113,7 +119,7 @@
           {{ scope.row.birthplace }}
         </template>
       </el-table-column>
-      <el-table-column label="电话" min-width="110" align="center">
+      <el-table-column label="手机" min-width="110" align="center">
         <template slot-scope="scope">
           {{ scope.row.mobilePhone }}
         </template>
@@ -124,6 +130,7 @@
         </template>
       </el-table-column>
     </el-table>
+    <detail-dialog v-model="showDialog" :detail="employeeDetail" @reloadData="fetchEmployeeList"/>
     <pagination :total="total" :limit.sync="size" :page.sync="page" class="pagination" @pagination="fetchEmployeeList"/>
     <el-row type="flex" justify="end" class="button-panel" align="middle">
       <el-button
@@ -139,21 +146,21 @@
 
 <script>
 import { getEmployeeList } from '../../api/employee'
-import UploadExcel from '@/views/employee/uploadExcel'
+import UploadExcel from '../../views/employee/uploadExcel'
+import DetailDialog from '../../views/employee/detailDialog'
 import Pagination from '@/components/Pagination'
 
 export default {
-  components: { Pagination, UploadExcel },
+  components: { UploadExcel, DetailDialog, Pagination },
   data() {
     return {
       employeeList: [],
+      employeeDetail: {},
       depOptions: [
         { depNo: 0, depName: 'All' },
         { depNo: 1, depName: 'CargoSmart' },
         { depNo: 2, depName: 'Iris4' },
-        { depNo: 3, depName: 'GDSC' },
-        { depNo: 4, depName: 'HRA' },
-        { depNo: 5, depName: 'Others...' }
+        { depNo: 3, depName: 'GDSC' }
       ],
       total: 0,
       page: 1,
@@ -161,6 +168,7 @@ export default {
       listLoading: true,
       multipleSelection: [],
       downloadLoading: false,
+      showDialog: false,
       searchCriteria: {
         empNo: '',
         name: '',
@@ -180,6 +188,11 @@ export default {
     },
     addNewEmployee() {
       // TODO addNewEmployee
+    },
+    updateEmployee(employee) {
+      this.employeeDetail = employee
+      this.showDialog = true
+      console.log('employee', employee)
     },
     deleteEmployee(employee) {
       this.$confirm('将永久删除该员工信息, 是否继续?', '提示', {
@@ -212,14 +225,14 @@ export default {
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = isExported
           ? ['员工编号', '姓名', '英文名', '性别', '所属部门', '身份证', '出生日期',
-            '民族', '籍贯', '电话', '月薪']
+            '民族', '籍贯', '手机', '月薪']
           : ['姓名', '英文名', '性别', '所属部门', '身份证', '出生日期',
-            '民族', '籍贯', '电话', '月薪']
+            '民族', '籍贯', '手机', '月薪']
         const filterVal = isExported
-          ? ['empNo', 'name', 'nameEn', 'gender', 'department', 'idCard', 'birthDate',
-            'nationality', 'nativePlace', 'phone', 'salary']
-          : ['name', 'nameEn', 'gender', 'department', 'idCard', 'birthDate',
-            'nationality', 'nativePlace', 'phone', 'salary']
+          ? ['id', 'name', 'englishName', 'gender', 'department', 'idCard', 'birthday',
+            'nationality', 'birthplace', 'mobilePhone', 'monthlySalary']
+          : ['name', 'englishName', 'gender', 'department', 'idCard', 'birthday',
+            'nationality', 'birthplace', 'mobilePhone', 'monthlySalary']
         const data = this.formatJson(filterVal, multipleSelection)
         excel.export_json_to_excel({
           header: tHeader,
@@ -230,7 +243,7 @@ export default {
       })
     },
     formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => v[j]))
+      return jsonData.map(v => filterVal.map(j => j === 'department' ? v[j].name : v[j]))
     },
     toThousandslsFilter(num) {
       return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
@@ -248,10 +261,12 @@ export default {
 
 <style lang="scss">
   .app-container {
-    .el-form-item__label{
-      line-height: 19px;
-      font-size: 13px;
-      padding-bottom: 3px;
+    .hrm-search-form{
+      .el-form-item__label{
+        line-height: 19px;
+        font-size: 13px;
+        padding-bottom: 3px;
+      }
     }
     .search-button-group {
       padding-top: 22px;
