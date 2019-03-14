@@ -20,7 +20,7 @@
           clearable/>
       </el-form-item>
       <el-form-item label="所属部门">
-        <el-select v-model="searchCriteria.department">
+        <el-select v-model="searchCriteria.department.id">
           <el-option
             v-for="item in departmentsList"
             :key="item.id"
@@ -30,13 +30,14 @@
       </el-form-item>
       <el-form-item label="出生日期">
         <el-date-picker
-          v-model="searchCriteria.birthDate"
+          v-model="searchCriteria.birthday"
           type="date"
+          value-format="yyyy-MM-dd"
           class="small-input"/>
       </el-form-item>
       <el-form-item label="电话号码">
         <el-input
-          v-model="searchCriteria.phone"
+          v-model="searchCriteria.mobilePhone"
           class="small-input"
           clearable/>
       </el-form-item>
@@ -168,11 +169,13 @@ export default {
       showDialog: false,
       showCreateDialog: false,
       searchCriteria: {
-        empNo: '',
+        id: '',
         name: '',
-        department: '',
-        birthDate: '',
-        phone: ''
+        department: {
+          id: 1
+        },
+        birthday: '',
+        mobilePhone: ''
       }
     }
   },
@@ -181,15 +184,16 @@ export default {
     this.getDepartmentList()
   },
   methods: {
-    searchByCriteria() {
-      // TODO searchByCriteria
+    async searchByCriteria() {
+      // TODO enhancement
       console.log('searchByCriteria', this.searchCriteria)
+      this.employeeList = await employeesService.searchEmployeeByCriteria(this.searchCriteria)
     },
     addNewEmployee() {
       this.showCreateDialog = true
     },
     async getDepartmentList() {
-      this.departmentsList = await departmentsService.getDepartmentsList('a')
+      this.departmentsList = await departmentsService.getDepartmentsList()
     },
     updateEmployee(employee) {
       this.employeeDetail = employee
@@ -212,11 +216,11 @@ export default {
       console.log('multiSelection', multiSelection)
     },
     resetFilter() {
-      this.searchCriteria.empNo = ''
+      this.searchCriteria.id = ''
       this.searchCriteria.name = ''
-      this.searchCriteria.department = ''
-      this.searchCriteria.birthDate = ''
-      this.searchCriteria.phone = ''
+      this.searchCriteria.department = { id: 1 }
+      this.searchCriteria.birthday = ''
+      this.searchCriteria.mobilePhone = ''
     },
     uploadExcelSuccess({ results }) {
       this.employeeList = results
@@ -253,7 +257,7 @@ export default {
     },
     async fetchEmployeeList() {
       this.listLoading = true
-      this.employeeList = await employeesService.getEmployeesList('aa')
+      this.employeeList = await employeesService.getEmployeesList()
       this.listLoading = false
     }
   }

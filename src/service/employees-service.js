@@ -19,14 +19,21 @@ const updateEmployee = async(params) => {
   console.log(api.updateEmployeesURL)
   await put(api.updateEmployeesURL, params)
 }
+
 const addEmployee = async(employee) => {
   const result = await post(api.getEmployeesURL, employee)
   return result.data
+}
+
+const searchEmployeeByCriteria = async(criteria) => {
+  const result = await post(api.searchEmployeesURL, criteria)
+  return result.data.content
 }
 
 export default {
   getEmployeesList,
   deleteEmployee,
   updateEmployee,
-  addEmployee
+  addEmployee,
+  searchEmployeeByCriteria
 }
