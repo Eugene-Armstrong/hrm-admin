@@ -130,7 +130,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <detail-dialog v-model="showDialog" :detail="employeeDetail" :departments="departmentsList" @reloadData="fetchEmployeeList"/>
+    <update-dialog v-model="showDialog" :detail="employeeDetail" :departments="departmentsList" @reloadData="fetchEmployeeList"/>
     <create-dialog v-model="showCreateDialog" @reloadData="fetchEmployeeList"/>
     <pagination :total="total" :limit.sync="size" :page.sync="page" class="pagination" @pagination="fetchEmployeeList"/>
     <el-row type="flex" justify="end" class="button-panel" align="middle">
@@ -147,13 +147,13 @@
 
 <script>
 import UploadExcel from '../../views/employee/uploadExcel'
-import DetailDialog from '../../views/employee/detailDialog'
+import UpdateDialog from './updateDialog'
 import CreateDialog from '../../views/employee/createDialog'
 import Pagination from '@/components/Pagination'
 import employeesService from '@/service/employees-service'
 import departmentsService from '@/service/departments-service'
 export default {
-  components: { Pagination, UploadExcel, DetailDialog, CreateDialog },
+  components: { Pagination, UploadExcel, UpdateDialog, CreateDialog },
   data() {
     return {
       employeeList: [],
@@ -203,7 +203,7 @@ export default {
         type: 'warning'
       }).then(async() => {
         await employeesService.deleteEmployee(id)
-        this.employeeList = await this.fetchEmployeeList()
+        this.fetchEmployeeList()
         console.log('delete employee', name)
       })
     },

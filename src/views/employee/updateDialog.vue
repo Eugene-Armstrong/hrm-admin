@@ -68,6 +68,7 @@
               <el-date-picker
                 v-model="copyDetail.birthday"
                 type="date"
+                value-format="yyyy-MM-dd"
                 class="small-input"/>
             </el-form-item>
           </el-col>
@@ -125,14 +126,6 @@ export default {
     }
   },
   data() {
-    // const validFacilityCode = (rule, value, callback) => {
-    //   if (value) {
-    //     if (value.length !== 5) {
-    //       callback(new Error('请填写长度为5位码头代码'))
-    //     }
-    //   }
-    //   callback()
-    // }
     return {
       showDialog: false,
       copyDetail: {},
@@ -143,6 +136,14 @@ export default {
         { value: '女' }
       ],
       rules: {
+        name: [{ required: true, message: '请填写姓名', trigger: ['change', 'blur'] }],
+        englishName: [{ required: true, message: '请填写英文名', trigger: ['change', 'blur'] }],
+        nationality: [{ required: true, message: '请填写民族', trigger: ['change', 'blur'] }],
+        birthplace: [{ required: true, message: '请填写籍贯', trigger: ['change', 'blur'] }],
+        birthday: [{ required: true, message: '请选择出生日期', trigger: ['change', 'blur'] }],
+        idCard: [{ required: true, message: '请选择出生日期', trigger: ['change', 'blur'] }],
+        mobilePhone: [{ required: true, message: '请填写手机号', trigger: ['change', 'blur'] }],
+        monthlySalary: [{ required: true, message: '请填写月薪', trigger: ['change', 'blur'] }]
       }
     }
   },
@@ -151,7 +152,6 @@ export default {
       if (newValue) {
         this.copyDetail = _.cloneDeep(this.detail)
         this.department = _.cloneDeep(this.copyDetail.department)
-        console.log('copyDetail', this.copyDetail)
         this.showDialog = newValue
       }
     }

@@ -152,6 +152,14 @@ export default {
         { value: '女' }
       ],
       rules: {
+        name: [{ required: true, message: '请填写姓名', trigger: ['change', 'blur'] }],
+        englishName: [{ required: true, message: '请填写英文名', trigger: ['change', 'blur'] }],
+        nationality: [{ required: true, message: '请填写民族', trigger: ['change', 'blur'] }],
+        birthplace: [{ required: true, message: '请填写籍贯', trigger: ['change', 'blur'] }],
+        birthday: [{ required: true, message: '请选择出生日期', trigger: ['change', 'blur'] }],
+        idCard: [{ required: true, message: '请选择出生日期', trigger: ['change', 'blur'] }],
+        mobilePhone: [{ required: true, message: '请填写手机号', trigger: ['change', 'blur'] }],
+        monthlySalary: [{ required: true, message: '请填写月薪', trigger: ['change', 'blur'] }]
       }
     }
   },
@@ -179,27 +187,18 @@ export default {
       this.$emit('reloadData')
       this.$emit('input', false)
     },
-    async confirm() {
-      this.newEmployee.department.id = this.department.name === 'CargoSmart'
-        ? 1 : this.department.name
-      console.log('newEmployee', this.newEmployee)
-      await employeesService.addEmployee(this.newEmployee)
-      this.$message.success('员工新增成功')
-      this.resetVisible()
-      // this.$refs['dataForm'].validate((valid) => {
-      //   if (valid) {
-      //     //
-      //   }
-      // })
+    confirm() {
+      this.$refs['dataForm'].validate(async(valid) => {
+        if (valid) {
+          this.newEmployee.department.id = this.department.name === 'CargoSmart'
+            ? 1 : this.department.name
+          console.log('newEmployee', this.newEmployee)
+          await employeesService.addEmployee(this.newEmployee)
+          this.$message.success('员工新增成功')
+          this.resetVisible()
+        }
+      })
     }
   }
 }
 </script>
-
-<style lang="scss">
-  .hrm-detail-dialog{
-    .el-input__inner{
-      width: 168px;
-    }
-  }
-</style>
