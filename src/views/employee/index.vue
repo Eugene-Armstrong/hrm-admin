@@ -19,15 +19,15 @@
           class="small-input"
           clearable/>
       </el-form-item>
-      <!--<el-form-item label="所属部门">-->
-      <!--<el-select v-model="searchCriteria.department.id">-->
-      <!--<el-option-->
-      <!--v-for="item in departmentsList"-->
-      <!--:key="item.id"-->
-      <!--:label="item.name"-->
-      <!--:value="item.id"/>-->
-      <!--</el-select>-->
-      <!--</el-form-item>-->
+      <el-form-item label="所属部门">
+        <el-select v-model="department.id" clearable>
+          <el-option
+            v-for="item in departmentsList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"/>
+        </el-select>
+      </el-form-item>
       <el-form-item label="出生日期">
         <el-date-picker
           v-model="searchCriteria.birthday"
@@ -173,6 +173,9 @@ export default {
         name: '',
         birthday: '',
         mobilePhone: ''
+      },
+      department: {
+        id: ''
       }
     }
   },
@@ -184,6 +187,11 @@ export default {
     async searchByCriteria() {
       // TODO enhancement
       console.log('searchByCriteria', this.searchCriteria)
+      if (this.department.id) {
+        this.searchCriteria.department = this.department
+      } else {
+        delete this.searchCriteria.department
+      }
       this.employeeList = await employeesService.searchEmployeeByCriteria(this.searchCriteria)
     },
     addNewEmployee() {
@@ -215,7 +223,7 @@ export default {
     resetFilter() {
       this.searchCriteria.id = ''
       this.searchCriteria.name = ''
-      this.searchCriteria.department = { id: 1 }
+      this.searchCriteria.department = { id: '' }
       this.searchCriteria.birthday = ''
       this.searchCriteria.mobilePhone = ''
     },
