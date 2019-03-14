@@ -12,8 +12,7 @@
         :rules="rules"
         label-position="right"
         label-width="80px"
-        size="small"
-        status-icon>
+        size="small">
         <el-row>
           <el-col :span="12">
             <el-form-item label="姓名" prop="name">

@@ -16,9 +16,7 @@ import axios from 'axios'
 export const get = async(url, params) => {
   return await axios.get(url, {
     // headers: await addAuthenticationHeader(),
-    params: {
-      ...params
-    }
+    data: params
   })
 }
 

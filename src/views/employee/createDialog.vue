@@ -12,8 +12,7 @@
         :rules="rules"
         label-position="right"
         label-width="80px"
-        size="small"
-        status-icon>
+        size="small">
         <el-row>
           <el-col :span="12">
             <el-form-item label="姓名" prop="name">
@@ -114,27 +113,16 @@ export default {
       default: () => {
         return {}
       }
-    },
-    isNew: {
-      type: Boolean,
-      default: false
     }
   },
   data() {
     return {
       showDialog: false,
       newEmployee: {
-        name: '',
-        englishName: '',
         gender: '男',
-        nationality: '',
         department: {
           id: 1
         },
-        birthplace: '',
-        birthday: '',
-        idCard: '',
-        mobilePhone: '',
         monthlySalary: 8000
       },
       department: {
@@ -145,14 +133,14 @@ export default {
         { value: '女' }
       ],
       rules: {
-        name: [{ required: true, message: '请填写姓名', trigger: ['change', 'blur'] }],
-        englishName: [{ required: true, message: '请填写英文名', trigger: ['change', 'blur'] }],
-        nationality: [{ required: true, message: '请填写民族', trigger: ['change', 'blur'] }],
-        birthplace: [{ required: true, message: '请填写籍贯', trigger: ['change', 'blur'] }],
-        birthday: [{ required: true, message: '请选择出生日期', trigger: ['change', 'blur'] }],
-        idCard: [{ required: true, message: '请选择出生日期', trigger: ['change', 'blur'] }],
-        mobilePhone: [{ required: true, message: '请填写手机号', trigger: ['change', 'blur'] }],
-        monthlySalary: [{ required: true, message: '请填写月薪', trigger: ['change', 'blur'] }]
+        name: [{ required: true, message: '请填写姓名', trigger: 'blur' }],
+        englishName: [{ required: true, message: '请填写英文名', trigger: 'blur' }],
+        nationality: [{ required: true, message: '请填写民族', trigger: 'blur' }],
+        birthplace: [{ required: true, message: '请填写籍贯', trigger: 'blur' }],
+        birthday: [{ required: true, message: '请选择出生日期', trigger: 'blur' }],
+        idCard: [{ required: true, message: '请选择填写身份证', trigger: 'blur' }],
+        mobilePhone: [{ required: true, message: '请填写手机号', trigger: 'blur' }],
+        monthlySalary: [{ required: true, message: '请填写月薪', trigger: 'blur' }]
       }
     }
   },
