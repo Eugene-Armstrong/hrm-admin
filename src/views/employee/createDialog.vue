@@ -100,6 +100,7 @@
 <script>
 
 import employeesService from '@/service/employees-service'
+import { phoneValidator, idCardValidator, salaryValidator } from '@/utils/validate'
 
 export default {
   name: 'CreateDialog',
@@ -138,9 +139,9 @@ export default {
         nationality: [{ required: true, message: '请填写民族', trigger: 'blur' }],
         birthplace: [{ required: true, message: '请填写籍贯', trigger: 'blur' }],
         birthday: [{ required: true, message: '请选择出生日期', trigger: 'blur' }],
-        idCard: [{ required: true, message: '请选择填写身份证', trigger: 'blur' }],
-        mobilePhone: [{ required: true, message: '请填写手机号', trigger: 'blur' }],
-        monthlySalary: [{ required: true, message: '请填写月薪', trigger: 'blur' }]
+        idCard: [{ required: true, trigger: 'blur', validator: idCardValidator }],
+        mobilePhone: [{ required: true, trigger: 'blur', validator: phoneValidator }],
+        monthlySalary: [{ required: true, trigger: 'blur', validator: salaryValidator }]
       }
     }
   },

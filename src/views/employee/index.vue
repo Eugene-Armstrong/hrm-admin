@@ -185,7 +185,6 @@ export default {
   },
   methods: {
     async searchByCriteria() {
-      // TODO enhancement
       console.log('searchByCriteria', this.searchCriteria)
       if (this.department.id) {
         this.searchCriteria.department = this.department
