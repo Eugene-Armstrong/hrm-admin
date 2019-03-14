@@ -29,7 +29,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="所属部门" prop="department">
-              <el-select v-model="department.name">
+              <el-select v-model="copyDetail.department.name">
                 <el-option
                   v-for="item in departments"
                   :key="item.id"
@@ -128,8 +128,11 @@ export default {
   data() {
     return {
       showDialog: false,
-      copyDetail: {},
-      department: {},
+      copyDetail: {
+        department: {
+          name: ''
+        }
+      },
       departmentsList: [],
       genderOptions: [
         { value: '男' },
@@ -151,7 +154,6 @@ export default {
     async value(newValue) {
       if (newValue) {
         this.copyDetail = _.cloneDeep(this.detail)
-        this.department = _.cloneDeep(this.copyDetail.department)
         this.showDialog = newValue
       }
     }
@@ -165,6 +167,7 @@ export default {
     confirm() {
       this.$refs['dataForm'].validate(async(valid) => {
         if (valid) {
+          this.copyDetail.department.id = this.copyDetail.department.name
           await employeesService.updateEmployee({ ...this.copyDetail })
           this.showDialog = false
           this.$emit('reloadData')
