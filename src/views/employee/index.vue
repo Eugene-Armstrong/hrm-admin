@@ -56,7 +56,7 @@
       border
       highlight-current-row
       @selection-change="handleSelectionChange">
-      <el-table-column fixed type="selection" width="35" align="left"/>
+      <el-table-column fixed type="selection" width="40" align="center"/>
       <el-table-column fixed label="操作" min-width="100" align="center">
         <template slot-scope="scope">
           <el-tooltip content="编辑" effect="dark" placement="top">
