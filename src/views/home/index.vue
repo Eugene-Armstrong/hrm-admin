@@ -1,8 +1,8 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">欢迎登录人力资源管理系统</div>
-    <div class="dashboard-sub-text">Hi hi，今天又是元气满满的一天呢 (づ￣ 3￣)づ mua~</div>
-    <div><img src="@/assets/happyboy.gif" class="emptyGif" alt=""></div>
+    <div class="dashboard-sub-text">Hi hi，今天又是元气满满的一天呢！&nbsp;&nbsp;(づ￣ 3￣)づ</div>
+    <div><img src="@/assets/toBeContinue.gif" class="emptyGif" alt=""></div>
   </div>
 </template>
 
@@ -27,7 +27,7 @@ export default {
     }
     &-sub-text {
       color: #999;
-      font-size: 14px;
+      font-size: 16px;
       line-height: 46px;
     }
   }

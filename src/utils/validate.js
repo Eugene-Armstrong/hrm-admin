@@ -45,7 +45,7 @@ export function idCardValidator(rule, value, callback) {
 
 // 月薪
 export function salaryValidator(rule, value, callback) {
-  if (isEmpty(value)) {
+  if (!value) {
     callback(new Error('请填写月薪'))
   } else if (value <= 0) {
     callback(new Error('月薪必须大于0'))

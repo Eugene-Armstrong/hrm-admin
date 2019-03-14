@@ -138,14 +138,14 @@ export default {
         { value: '女' }
       ],
       rules: {
-        name: [{ required: true, message: '请填写姓名', trigger: ['change', 'blur'] }],
-        englishName: [{ required: true, message: '请填写英文名', trigger: ['change', 'blur'] }],
-        nationality: [{ required: true, message: '请填写民族', trigger: ['change', 'blur'] }],
-        birthplace: [{ required: true, message: '请填写籍贯', trigger: ['change', 'blur'] }],
-        birthday: [{ required: true, message: '请选择出生日期', trigger: ['change', 'blur'] }],
-        idCard: [{ required: true, trigger: ['change', 'blur'], validator: idCardValidator }],
-        mobilePhone: [{ required: true, trigger: ['change', 'blur'], validator: phoneValidator }],
-        monthlySalary: [{ required: true, trigger: ['change', 'blur'], validator: salaryValidator }]
+        name: [{ required: true, message: '请填写姓名', trigger: 'blur' }],
+        englishName: [{ required: true, message: '请填写英文名', trigger: 'blur' }],
+        nationality: [{ required: true, message: '请填写民族', trigger: 'blur' }],
+        birthplace: [{ required: true, message: '请填写籍贯', trigger: 'blur' }],
+        birthday: [{ required: true, message: '请选择出生日期', trigger: 'blur' }],
+        idCard: [{ required: true, trigger: 'blur', validator: idCardValidator }],
+        mobilePhone: [{ required: true, trigger: 'blur', validator: phoneValidator }],
+        monthlySalary: [{ required: true, trigger: 'blur', validator: salaryValidator }]
       }
     }
   },
