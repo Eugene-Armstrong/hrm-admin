@@ -132,7 +132,7 @@
       </el-table-column>
     </el-table>
     <update-dialog v-model="showDialog" :detail="employeeDetail" :departments="departmentsList" @reloadData="fetchEmployeeList"/>
-    <create-dialog v-model="showCreateDialog" @reloadData="fetchEmployeeList"/>
+    <create-dialog v-model="showCreateDialog" :departments="departmentsList" @reloadData="fetchEmployeeList"/>
     <pagination :total="total" :limit.sync="size" :page.sync="page" class="pagination" @pagination="fetchEmployeeList"/>
     <el-row type="flex" justify="end" class="button-panel" align="middle">
       <el-button

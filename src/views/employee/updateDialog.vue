@@ -133,7 +133,6 @@ export default {
           name: ''
         }
       },
-      departmentsList: [],
       genderOptions: [
         { value: '男' },
         { value: '女' }

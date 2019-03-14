@@ -31,7 +31,7 @@
             <el-form-item label="所属部门" prop="department">
               <el-select v-model="department.name">
                 <el-option
-                  v-for="item in depOptions"
+                  v-for="item in departments"
                   :key="item.id"
                   :label="item.name"
                   :value="item.id"/>
@@ -109,20 +109,18 @@ export default {
       type: Boolean,
       default: false
     },
+    departments: {
+      type: Array,
+      default: () => {
+        return {}
+      }
+    },
     isNew: {
       type: Boolean,
       default: false
     }
   },
   data() {
-    // const validFacilityCode = (rule, value, callback) => {
-    //   if (value) {
-    //     if (value.length !== 5) {
-    //       callback(new Error('请填写长度为5位码头代码'))
-    //     }
-    //   }
-    //   callback()
-    // }
     return {
       showDialog: false,
       newEmployee: {
@@ -140,13 +138,8 @@ export default {
         monthlySalary: 8000
       },
       department: {
-        name: 'CargoSmart'
+        name: ''
       },
-      depOptions: [
-        { id: 1, name: 'CargoSmart' },
-        { id: 2, name: 'Iris4' },
-        { id: 3, name: 'GDSC' }
-      ],
       genderOptions: [
         { value: '男' },
         { value: '女' }
@@ -167,6 +160,7 @@ export default {
     async value(newValue) {
       if (newValue) {
         this.showDialog = newValue
+        this.department.name = this.departments[0].name
       }
     }
   },
