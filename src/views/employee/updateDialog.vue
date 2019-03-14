@@ -166,7 +166,8 @@ export default {
     confirm() {
       this.$refs['dataForm'].validate(async(valid) => {
         if (valid) {
-          this.copyDetail.department.id = this.copyDetail.department.name
+          this.copyDetail.department.id = typeof this.copyDetail.department.name !== 'number'
+            ? this.copyDetail.department.id : this.copyDetail.department.name
           await employeesService.updateEmployee({ ...this.copyDetail })
           this.showDialog = false
           this.$emit('reloadData')

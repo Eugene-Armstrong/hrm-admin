@@ -184,7 +184,7 @@ export default {
     confirm() {
       this.$refs['dataForm'].validate(async(valid) => {
         if (valid) {
-          this.newEmployee.department.id = this.department.name === 'CargoSmart'
+          this.newEmployee.department.id = typeof this.department.name !== 'number'
             ? 1 : this.department.name
           console.log('newEmployee', this.newEmployee)
           await employeesService.addEmployee(this.newEmployee)
