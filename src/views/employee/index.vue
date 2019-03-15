@@ -13,7 +13,7 @@
           class="small-input"
           clearable/>
       </el-form-item>
-      <el-form-item label="姓名">
+      <el-form-item label="姓名/英文名">
         <el-input
           v-model="searchCriteria.name"
           class="small-input"
