@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { getExcelUploadApi } from '../../api/employee'
+import employeesApi from '@/api/employees'
 export default {
   props: {
     beforeUpload: Function, // eslint-disable-line
@@ -30,7 +30,7 @@ export default {
         header: null,
         results: null
       },
-      uploadApi: getExcelUploadApi()
+      uploadApi: employeesApi.getExcelUploadApi
     }
   },
   methods: {
@@ -56,13 +56,13 @@ export default {
     beforeFileUpload(file) {
       const isXlsx = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
       const isXls = file.type === 'application/vnd.ms-excel'
-      const isSizeLimited = file.size / 1024 / 1024 < 10
+      const isSizeLimited = file.size / 1024 / 1024 < 8
 
       if (!isXlsx && !isXls) {
         this.$message.error('文件后缀必须为 .xlsx 或 .xls')
       }
       if (!isSizeLimited) {
-        this.$message.error('文件大小不能超过10MB')
+        this.$message.error('文件大小不能超过8MB')
       }
       console.log('文件对象： ', file)
       return (isXlsx || isXls) && isSizeLimited

@@ -45,7 +45,7 @@
         <el-button type="primary" size="small" @click="searchByCriteria">查询</el-button>
         <el-button size="small" @click="resetFilter">重置</el-button>
         <el-button type="success" @click="addNewEmployee">新增</el-button>
-        <!--<upload-excel :on-success="uploadExcelSuccess"/>-->
+        <upload-excel :on-success="uploadExcelSuccess"/>
       </el-form-item>
     </el-form>
     <el-table
@@ -147,14 +147,14 @@
 </template>
 
 <script>
-// import UploadExcel from '../../views/employee/uploadExcel'
+import UploadExcel from '@/views/employee/uploadExcel'
 import UpdateDialog from './updateDialog'
-import CreateDialog from '../../views/employee/createDialog'
+import CreateDialog from '@/views/employee/createDialog'
 import Pagination from '@/components/Pagination'
-import employeesService from '@/service/employees-service'
-import departmentsService from '@/service/departments-service'
+import employeesService from '@/api/employees'
+import departmentsService from '@/api/departments'
 export default {
-  components: { Pagination, UpdateDialog, CreateDialog },
+  components: { Pagination, UpdateDialog, CreateDialog, UploadExcel },
   data() {
     return {
       employeeList: [],
@@ -202,7 +202,6 @@ export default {
     updateEmployee(employee) {
       this.employeeDetail = employee
       this.showDialog = true
-      console.log('employee', employee)
     },
     async deleteEmployee(id) {
       this.$confirm('将永久删除该员工信息, 是否继续?', '提示', {
@@ -212,7 +211,7 @@ export default {
       }).then(async() => {
         await employeesService.deleteEmployee(id)
         this.fetchEmployeeList()
-        console.log('delete employee', name)
+        this.$message.success('删除成功')
       })
     },
     handleSelectionChange(multiSelection) {

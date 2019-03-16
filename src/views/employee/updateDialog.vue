@@ -99,7 +99,7 @@
 </template>
 <script>
 import _ from 'lodash'
-import employeesService from '@/service/employees-service'
+import employeesService from '@/api/employees'
 import { phoneValidator, idCardValidator, salaryValidator } from '@/utils/validate'
 export default {
   name: 'DetailDialog',
