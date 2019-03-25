@@ -45,7 +45,6 @@
         <el-button type="primary" size="small" @click="searchByCriteria">查询</el-button>
         <el-button size="small" @click="resetFilter">重置</el-button>
         <el-button type="success" @click="addNewEmployee">新增</el-button>
-        <upload-excel :on-success="uploadExcelSuccess"/>
       </el-form-item>
     </el-form>
     <el-table
@@ -147,14 +146,13 @@
 </template>
 
 <script>
-import UploadExcel from '@/views/employee/uploadExcel'
 import UpdateDialog from './updateDialog'
 import CreateDialog from '@/views/employee/createDialog'
 import Pagination from '@/components/Pagination'
 import employeesService from '@/api/employees'
 import departmentsService from '@/api/departments'
 export default {
-  components: { Pagination, UpdateDialog, CreateDialog, UploadExcel },
+  components: { Pagination, UpdateDialog, CreateDialog },
   data() {
     return {
       employeeList: [],
