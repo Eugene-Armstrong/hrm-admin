@@ -140,7 +140,7 @@
         type="primary"
         size="small"
         @click="exportSelectedItems(multipleSelection)">导出数据</el-button>
-      <el-button size="small" @click="exportSelectedItems([])">模板下载</el-button>
+        <!--<el-button size="small" @click="exportSelectedItems([])">模板下载</el-button>-->
     </el-row>
   </div>
 </template>
