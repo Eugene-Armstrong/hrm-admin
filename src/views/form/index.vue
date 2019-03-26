@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="dashboard-text">To Be Continue ...</div>
-    <div><img src="@/assets/happyboy.gif" class="emptyGif" alt=""></div>
+    <div><img src="@/assets/happyboy.gif" class="gif" alt=""></div>
   </div>
 </template>
 
@@ -42,7 +42,7 @@ export default {
      }
     &-text {
       text-align: center;
-       font-size: 30px;
+       font-size: 24px;
        line-height: 46px;
      }
     &-sub-text {
@@ -51,9 +51,9 @@ export default {
        line-height: 46px;
     }
   }
-  .emptyGif {
+  .gif {
     display: block;
-    width: 45%;
+    width: 36%;
     margin: 0 auto;
   }
 </style>
