@@ -1,6 +1,6 @@
 import { get, remove, post, put } from '@/utils/httpHelper'
 
-const employeesUrl = `${process.env.BASE_API}/employees`
+const employeesUrl = `${process.env.BASE_API}/employee`
 
 const getEmployeesList = async(params) => {
   const result = await get(employeesUrl, params)
